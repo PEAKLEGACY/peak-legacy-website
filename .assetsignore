@@ -1,0 +1,9 @@
+.git/
+.github/
+node_modules/
+README.md
+CMS-SETUP.md
+LOCAL-SEO-GOOGLE-BUSINESS-PROFILE.md
+DEPLOY-CHECKLIST.md
+wrangler.jsonc
+*.zip

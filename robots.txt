@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://peaklegacy.co.ke/sitemap.xml
