@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "peak-legacy-hardware",
+  "name": "peak-legacy-website",
   "compatibility_date": "2026-09-14",
   "assets": {
     "directory": "."

@@ -6,6 +6,23 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script><script src="content-loader.js"></script><script>
 const params=new URLSearchParams(location.search),path=params.get('path');
 const header=document.getElementById('articleHeader'),body=document.getElementById('articleBody');
-async function load(){try{if(!path)throw Error('Missing article');const res=await fetch(`https://raw.githubusercontent.com/${CONTENT_REPO}/${CONTENT_BRANCH}/${path}`);if(!res.ok)throw Error('Article unavailable');const text=await res.text();const p=PeakContent.parseFrontmatter(text);header.innerHTML=`<p class="eyebrow dark">${PeakContent.escapeHtml(p.meta.category||'PEAK LEGACY JOURNAL')}</p><h1>${PeakContent.escapeHtml(p.meta.title||'Peak Legacy Journal')}</h1><div class="article-meta">${PeakContent.escapeHtml(p.meta.date||'')} · ${PeakContent.escapeHtml(p.meta.author||'Peak Legacy Hardware')}</div>${p.meta.image?`<img class="article-cover" src="${PeakContent.escapeHtml(p.meta.image)}" alt="">`:''}`;body.innerHTML=PeakContent.simpleMarkdown(p.body);document.title=`${p.meta.title||'Article'} | Peak Legacy Journal`;}catch(e){header.innerHTML='<h1>Article not available</h1>';body.innerHTML='<p>Please return to the Journal and choose another article.</p>';}}
+async function load(){
+  try{
+    if(!path) throw Error('Missing article');
+    const safePath = path.replace(/^\/+/, '');
+    let res = await fetch(safePath);
+    if(!res.ok) res = await fetch(`https://raw.githubusercontent.com/${CONTENT_REPO}/${CONTENT_BRANCH}/${safePath}`);
+    if(!res.ok) throw Error('Article unavailable');
+    const text = await res.text();
+    const p = PeakContent.parseFrontmatter(text);
+    header.innerHTML = `<p class="eyebrow dark">${PeakContent.escapeHtml(p.meta.category||'PEAK LEGACY JOURNAL')}</p><h1>${PeakContent.escapeHtml(p.meta.title||'Peak Legacy Journal')}</h1><div class="article-meta">${PeakContent.escapeHtml(p.meta.date||'')} · ${PeakContent.escapeHtml(p.meta.author||'Peak Legacy Hardware')}</div>${p.meta.image?`<img class="article-cover" src="${PeakContent.escapeHtml(p.meta.image)}" alt="">`:''}`;
+    body.innerHTML = PeakContent.simpleMarkdown(p.body);
+    document.title = `${p.meta.title||'Article'} | Peak Legacy Journal`;
+  }catch(e){
+    console.error(e);
+    header.innerHTML='<h1>Article not available</h1>';
+    body.innerHTML='<p>Please return to the Journal and choose another article.</p>';
+  }
+}
 load();const menuBtn=document.getElementById('menuBtn'),nav=document.getElementById('nav');menuBtn.onclick=()=>{const open=nav.classList.toggle('open');menuBtn.setAttribute('aria-expanded',open)};
 </script></body></html>
